@@ -6,6 +6,7 @@
 
 <a href="/admin/websites/create" class="btn btn-primary mb-3">Add Website</a>
 
+
 <table class="table table-bordered">
     <tr>
         <th>Domain</th>

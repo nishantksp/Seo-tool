@@ -31,6 +31,8 @@ class KeywordRankingService
             'checked_at' => now(),
         ]);
     }
+
+    //getting keyw
 }
 
 

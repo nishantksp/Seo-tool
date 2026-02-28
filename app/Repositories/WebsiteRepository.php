@@ -14,7 +14,7 @@ class WebsiteRepository
 
     public function getAllWithUserKeywordsLatest(): Collection
     {
-        return Website::with(['user', 'keywords'])->latest()->get();
+        return Website::with(['user', 'keywords'])->latest()-> get();
     }
 
     public function getAllWithUser(): Collection
@@ -57,5 +57,20 @@ class WebsiteRepository
     {
         return Website::count();
     }
+    //getting all websites with selected website id and domain for dropdown
+    public function getAllForDropDown():Collection
+    {
+        return Website::select('id','domain')->orderBy('domain')->get();
+    }
+
+    //getting keyword for selected website id
+    public function getWithKeywordsById(?int $id):Collection{
+        return Website::with('keywords')
+        ->when($id, fn($q)=>$q->where('id', $id))
+        ->latest()
+        ->get();
+    }
+
+
 }
 

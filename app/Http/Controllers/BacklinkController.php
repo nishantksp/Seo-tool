@@ -4,18 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Services\BacklinkService;
+use App\Services\WebsiteService;
+use App\Services\KeywordService;
 use Illuminate\Http\Request;
 
 class BacklinkController extends Controller
 {
-    public function __construct(private BacklinkService $service)
+    public function __construct(private BacklinkService $service,
+    private WebsiteService $websiteService,
+    private KeywordService $keywordService)
     {
     }
 
-    public function index()
-    {
+    public function index(Request $request)
+    {   
+        $selectedId= $request->website_id;
+        $allWebsites=$this->websiteService->listDropDownWebsites();
+        $websites = $this->websiteService->listWebsitesWithKeywords($selectedId);
+        $keywords=$this->keywordService->getKeywordsByWebsiteId($selectedId);
         $backlinks = $this->service->listAdminBacklinks();
-        return view('admin.backlinks.index', compact('backlinks'));
+        return view('admin.backlinks.index', compact('backlinks','websites','allWebsites','keywords'));
     }
 
     public function create()

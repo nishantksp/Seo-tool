@@ -51,6 +51,11 @@ class KeywordService
         $websiteIds = $this->websites->getIdsByUserId($userId);
         return $this->keywords->getByWebsiteIdsWithLatestRanking($websiteIds);
     }
+
+    // getting all keywords for a website
+    public function getKeywordsByWebsiteId($id){
+        return $this->keywords->getByWebsiteIdsWithLatestRanking(collect([$id]));
+    }
 }
 
 
