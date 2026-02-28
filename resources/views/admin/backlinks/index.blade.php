@@ -6,6 +6,42 @@
 
 <a href="{{ route('backlinks.create') }}" class="btn btn-primary mb-3">Add Backlink</a>
 
+
+<form method="GET" action="{{ url('/admin/backlinks') }}">
+    <select name="website_id" onchange="this.form.submit()">
+        <option value="">All Websites</option>
+        @foreach ($allWebsites as $w)
+            <option value="{{ $w->id }}"
+                {{ request('website_id') == $w->id ? 'selected' : '' }}>
+                {{ $w->domain }}
+            </option>
+        @endforeach
+    </select>
+</form>
+
+
+<!-- showing website selected website with its keyword details  -->
+<table class="table table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Keyword</th>
+        <th>First Rank</th>
+        <th>Best Rank</th>
+        <th>Date</th>
+    </tr>
+
+    @foreach( $keywords as $keyword)
+    <tr>
+        <td>{{$keyword->id}}</td>
+        <td>{{$keyword->keyword}}</td>
+        <td>30</td>
+        <td>30</td>
+        <td>{{$keyword->created_at}}</td>
+       
+    </tr>
+    @endforeach
+</table>
+<!-- 
 <table class="table table-bordered">
     <tr>
         <th>Client</th>
@@ -49,7 +85,7 @@
 </tr>
 @endforeach
 
-</table>
+</table> -->
 
 {{ $backlinks->links() }}
 
