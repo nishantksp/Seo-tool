@@ -65,5 +65,16 @@ class WebsiteService
     {
         return ['Digital Marketing', 'E-commerce', 'Healthcare', 'Education', 'Real Estate', 'Finance'];
     }
+
+    //getting website with selected website id for dropdown
+    public function listDropDownWebsites(): Collection{
+        return $this->websites->getAllForDropDown();
+    }
+
+    public function listWebsitesWithKeywords(?int $id): Collection
+    {
+        return $this->websites->getWithKeywordsById($id);
+    }
+
 }
 

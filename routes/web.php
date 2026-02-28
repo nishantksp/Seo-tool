@@ -8,20 +8,24 @@ use App\Http\Controllers\Client\DashboardController as ClientDashboard;
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index']);
 
-Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
-Route::resource('/admin/backlinks', \App\Http\Controllers\BacklinkController::class);
-Route::resource('/admin/keywords', \App\Http\Controllers\KeywordController::class);
-Route::get('/admin/keywords/{id}/ranking', [\App\Http\Controllers\KeywordRankingController::class, 'create']);
-Route::post('/admin/rankings', [\App\Http\Controllers\KeywordRankingController::class, 'store']);
-Route::resource('/admin/onpage', \App\Http\Controllers\OnpageReportController::class);
-Route::resource('/admin/social', \App\Http\Controllers\SocialPostController::class);
+    //     Route::get('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'index']);
+    // Route::get('/admin/websites/create', [\App\Http\Controllers\WebsiteController::class, 'create']);
+    // Route::post('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'store']);
+    Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
+    Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
+    Route::resource('/admin/backlinks', \App\Http\Controllers\BacklinkController::class);
+    Route::resource('/admin/keywords', \App\Http\Controllers\KeywordController::class);
+    Route::get('/admin/keywords/{id}/ranking', [\App\Http\Controllers\KeywordRankingController::class, 'create']);
+    Route::post('/admin/rankings', [\App\Http\Controllers\KeywordRankingController::class, 'store']);
+    Route::resource('/admin/onpage', \App\Http\Controllers\OnpageReportController::class);
+    Route::resource('/admin/social', \App\Http\Controllers\SocialPostController::class);
 });
 
 Route::middleware(['auth', 'role:client'])->group(function () {
     Route::get('/client/dashboard', [ClientDashboard::class, 'index']);
 });
 
-Route::middleware(['auth','role:client'])->prefix('client')->group(function () {
+Route::middleware(['auth', 'role:client'])->prefix('client')->group(function () {
 
     Route::get('/dashboard', [ClientDashboard::class, 'index']);
 
@@ -29,12 +33,12 @@ Route::middleware(['auth','role:client'])->prefix('client')->group(function () {
     Route::get('/keywords', [\App\Http\Controllers\Client\KeywordController::class, 'index']);
     Route::get('/backlinks', [\App\Http\Controllers\Client\BacklinkController::class, 'index']);
     Route::get('/onpage', [\App\Http\Controllers\Client\OnpageController::class, 'index']);
-   Route::get('/blogs', [\App\Http\Controllers\Client\BlogController::class, 'index']);
-Route::get('/blogs/create', [\App\Http\Controllers\Client\BlogController::class, 'create']);
-Route::post('/blogs', [\App\Http\Controllers\Client\BlogController::class, 'store']);
+    Route::get('/blogs', [\App\Http\Controllers\Client\BlogController::class, 'index']);
+    Route::get('/blogs/create', [\App\Http\Controllers\Client\BlogController::class, 'create']);
+    Route::post('/blogs', [\App\Http\Controllers\Client\BlogController::class, 'store']);
     Route::get('/social', [\App\Http\Controllers\Client\SocialController::class, 'index']);
-Route::get('/social/create', [\App\Http\Controllers\Client\SocialController::class, 'create']);
-Route::post('/social', [\App\Http\Controllers\Client\SocialController::class, 'store']);
+    Route::get('/social/create', [\App\Http\Controllers\Client\SocialController::class, 'create']);
+    Route::post('/social', [\App\Http\Controllers\Client\SocialController::class, 'store']);
 });
 
 Route::get('/', function () {
@@ -51,6 +55,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
-
-
+require __DIR__ . '/auth.php';

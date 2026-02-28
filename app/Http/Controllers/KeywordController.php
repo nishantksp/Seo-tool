@@ -14,6 +14,7 @@ class KeywordController extends Controller
 
     public function index()
     {
+        
         $keywords = $this->service->listAdminKeywords();
         return view('admin.keywords.index', compact('keywords'));
     }
@@ -57,6 +58,8 @@ class KeywordController extends Controller
         $this->service->deleteKeyword($id);
         return back()->with('success','Keyword Deleted');
     }
+
+    
 }
 
 
