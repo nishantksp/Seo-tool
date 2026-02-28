@@ -9,6 +9,7 @@ class Backlink extends Model
     protected $fillable = [
     'website_id',
     'source_url',
+    'target_url',
     'anchor_text',
     'link_type',
     'da',
