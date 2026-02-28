@@ -21,4 +21,5 @@ public function website()
 {
     return $this->belongsTo(\App\Models\Website::class);
 }
+
 }
