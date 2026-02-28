@@ -3,35 +3,25 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\SocialPost;
-use App\Models\Website;
+use App\Services\SocialPostService;
 use Illuminate\Http\Request;
 
 class SocialController extends Controller
 {
+    public function __construct(private SocialPostService $service)
+    {
+    }
+
     public function index()
     {
-        $websiteIds = Website::where('user_id', auth()->id())->pluck('id');
+        $data = $this->service->listClientPostsWithStats(auth()->id());
 
-        $posts = SocialPost::whereIn('website_id', $websiteIds)
-            ->latest()
-            ->get();
-
-        $totalPosts = $posts->count();
-        $totalClicks = $posts->sum('clicks');
-        $totalEngagement = $posts->sum('engagement');
-
-        return view('client.social.index', compact(
-            'posts',
-            'totalPosts',
-            'totalClicks',
-            'totalEngagement'
-        ));
+        return view('client.social.index', $data);
     }
 
     public function create()
     {
-        $websites = Website::where('user_id', auth()->id())->get();
+        $websites = $this->service->listClientWebsites(auth()->id());
         return view('client.social.create', compact('websites'));
     }
 
@@ -43,8 +33,10 @@ class SocialController extends Controller
             'date' => 'required',
         ]);
 
-        SocialPost::create($request->all());
+        $this->service->createClientPost($request->all());
 
         return redirect('/client/social')->with('success', 'Post Added');
     }
 }
+
+

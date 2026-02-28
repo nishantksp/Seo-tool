@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Keyword;
-use App\Models\KeywordRanking;
+use App\Services\KeywordRankingService;
 use Illuminate\Http\Request;
 
 class KeywordRankingController extends Controller
 {
+    public function __construct(private KeywordRankingService $service)
+    {
+    }
+
     public function create($keywordId)
     {
-        $keyword = Keyword::findOrFail($keywordId);
+        $keyword = $this->service->getKeywordOrFail((int) $keywordId);
         return view('admin.rankings.create', compact('keyword'));
     }
 
@@ -22,19 +25,10 @@ class KeywordRankingController extends Controller
             'rank' => 'required|integer',
         ]);
 
-        $lastRanking = KeywordRanking::where('keyword_id', $request->keyword_id)
-                        ->latest()
-                        ->first();
-
-        $previousRank = $lastRanking ? $lastRanking->rank : null;
-
-        KeywordRanking::create([
-            'keyword_id' => $request->keyword_id,
-            'rank' => $request->rank,
-            'previous_rank' => $previousRank,
-            'checked_at' => now(),
-        ]);
+        $this->service->createRanking((int) $request->keyword_id, (int) $request->rank);
 
         return redirect('/admin/keywords')->with('success','Ranking Updated');
     }
 }
+
+

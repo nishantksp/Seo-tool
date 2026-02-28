@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Backlink;
-use App\Models\Website;
+use App\Services\BacklinkService;
 use Illuminate\Http\Request;
 
 class BacklinkController extends Controller
 {
+    public function __construct(private BacklinkService $service)
+    {
+    }
+
     public function index()
     {
-        $backlinks = Backlink::with('website.user')->latest()->paginate(10);
+        $backlinks = $this->service->listAdminBacklinks();
         return view('admin.backlinks.index', compact('backlinks'));
     }
 
     public function create()
     {
-        $websites = Website::with('user')->get();
+        $websites = $this->service->listAdminWebsites();
         return view('admin.backlinks.create', compact('websites'));
     }
 
@@ -30,30 +33,32 @@ class BacklinkController extends Controller
             'status' => 'required',
         ]);
 
-        Backlink::create($request->all());
+        $this->service->createBacklink($request->all());
 
         return redirect('/admin/backlinks')->with('success','Backlink Added');
     }
 
     public function edit($id)
     {
-        $backlink = Backlink::findOrFail($id);
-        $websites = Website::with('user')->get();
+        $backlink = $this->service->getBacklinkForEdit($id);
+        $websites = $this->service->listAdminWebsites();
 
         return view('admin.backlinks.edit', compact('backlink','websites'));
     }
 
     public function update(Request $request, $id)
     {
-        $backlink = Backlink::findOrFail($id);
-        $backlink->update($request->all());
+        $backlink = $this->service->getBacklinkForEdit($id);
+        $this->service->updateBacklink($backlink, $request->all());
 
         return redirect('/admin/backlinks')->with('success','Backlink Updated');
     }
 
     public function destroy($id)
     {
-        Backlink::destroy($id);
+        $this->service->deleteBacklink($id);
         return back()->with('success','Backlink Deleted');
     }
 }
+
+

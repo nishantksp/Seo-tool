@@ -1,3 +1,11 @@
 hello 
 this is Sachin
-and this is nishant
+
+git checkout main
+git pull origin main
+git checkout -b feature-sachin
+
+
+git add .
+git commit -m "Task completed"
+git push origin feature-new-task

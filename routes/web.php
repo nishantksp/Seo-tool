@@ -7,8 +7,14 @@ use App\Http\Controllers\Client\DashboardController as ClientDashboard;
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index']);
+<<<<<<< HEAD
     // Route::get('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'index']);
 // Route::get('/admin/websites/create', [\App\Http\Controllers\WebsiteController::class, 'create']);
+=======
+//     Route::get('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'index']);
+// Route::get('/admin/websites/create', [\App\Http\Controllers\WebsiteController::class, 'create']);
+// Route::post('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'store']);
+>>>>>>> 70a630377b5089423cc6304de09fa52cc5b6aa9c
 Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
 Route::resource('/admin/backlinks', \App\Http\Controllers\BacklinkController::class);
 Route::resource('/admin/keywords', \App\Http\Controllers\KeywordController::class);

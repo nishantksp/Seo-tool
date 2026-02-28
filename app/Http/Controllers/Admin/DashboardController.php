@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Website;
-use App\Models\Keyword;
+use App\Services\AdminDashboardService;
 
 class DashboardController extends Controller
 {
+    public function __construct(private AdminDashboardService $service)
+    {
+    }
+
     public function index()
     {
-        return view('admin.dashboard', [
-            'clients' => User::where('role','client')->count(),
-            'websites' => Website::count(),
-            'keywords' => Keyword::count(),
-        ]);
+        return view('admin.dashboard', $this->service->getStats());
     }
 }
+
+
