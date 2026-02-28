@@ -24,6 +24,11 @@
 </div>
 
 <div class="mb-3">
+    <label>Target URL</label>
+    <input type="text" name="target_url" class="form-control">
+</div>
+
+<div class="mb-3">
     <label>Anchor Text</label>
     <input type="text" name="anchor_text" class="form-control">
 </div>
