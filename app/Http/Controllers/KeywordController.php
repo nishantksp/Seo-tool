@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\Keyword;
-use App\Models\Website;
+use App\Services\KeywordService;
 use Illuminate\Http\Request;
 
 class KeywordController extends Controller
 {
+    public function __construct(private KeywordService $service)
+    {
+    }
+
     public function index()
     {
-        $keywords = Keyword::with('website.user')->latest()->paginate(10);
+        $keywords = $this->service->listAdminKeywords();
         return view('admin.keywords.index', compact('keywords'));
     }
 
     public function create()
     {
-        $websites = Website::with('user')->get();
+        $websites = $this->service->listAdminWebsites();
         return view('admin.keywords.create', compact('websites'));
     }
 
@@ -28,30 +31,32 @@ class KeywordController extends Controller
             'keyword' => 'required',
         ]);
 
-        Keyword::create($request->all());
+        $this->service->createKeyword($request->all());
 
         return redirect('/admin/keywords')->with('success','Keyword Added');
     }
 
     public function edit($id)
     {
-        $keyword = Keyword::findOrFail($id);
-        $websites = Website::with('user')->get();
+        $keyword = $this->service->getKeywordForEdit($id);
+        $websites = $this->service->listAdminWebsites();
 
         return view('admin.keywords.edit', compact('keyword','websites'));
     }
 
     public function update(Request $request, $id)
     {
-        $keyword = Keyword::findOrFail($id);
-        $keyword->update($request->all());
+        $keyword = $this->service->getKeywordForEdit($id);
+        $this->service->updateKeyword($keyword, $request->all());
 
         return redirect('/admin/keywords')->with('success','Keyword Updated');
     }
 
     public function destroy($id)
     {
-        Keyword::destroy($id);
+        $this->service->deleteKeyword($id);
         return back()->with('success','Keyword Deleted');
     }
 }
+
+

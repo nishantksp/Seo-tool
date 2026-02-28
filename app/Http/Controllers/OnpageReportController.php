@@ -3,39 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\OnpageReport;
-use App\Models\Website;
+use App\Services\OnpageReportService;
 use Illuminate\Http\Request;
 
 class OnpageReportController extends Controller
 {
+    public function __construct(private OnpageReportService $service)
+    {
+    }
+
     public function index()
     {
-        $reports = OnpageReport::with('website.user')->latest()->paginate(10);
+        $reports = $this->service->listAdminReports();
         return view('admin.onpage.index', compact('reports'));
     }
 
     public function create()
     {
-        $websites = Website::with('user')->get();
+        $websites = $this->service->listAdminWebsites();
         return view('admin.onpage.create', compact('websites'));
     }
 
     public function store(Request $request)
     {
-        $report = new OnpageReport($request->all());
-
-        $report->seo_score = $report->calculateScore();
-        $report->checked_at = now();
-
-        $report->save();
+        $this->service->createReport($request->all());
 
         return redirect('/admin/onpage')->with('success','Report Added');
     }
 
     public function destroy($id)
     {
-        OnpageReport::destroy($id);
+        $this->service->deleteReport($id);
         return back()->with('success','Deleted');
     }
 }
+
+

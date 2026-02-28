@@ -3,19 +3,20 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\OnpageReport;
-use App\Models\Website;
+use App\Services\OnpageReportService;
 
 class OnpageController extends Controller
 {
+    public function __construct(private OnpageReportService $service)
+    {
+    }
+
     public function index()
-{
-    $websiteIds = \App\Models\Website::where('user_id', auth()->id())->pluck('id');
+    {
+        $reports = $this->service->listClientReports(auth()->id());
 
-    $reports = \App\Models\OnpageReport::whereIn('website_id',$websiteIds)
-                ->latest()
-                ->get();
+        return view('client.onpage', compact('reports'));
+    }
+}
 
-    return view('client.onpage', compact('reports'));
-}
-}
+
