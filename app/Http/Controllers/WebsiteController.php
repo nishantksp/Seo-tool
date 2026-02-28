@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
 {
-
-
     public function __construct(private WebsiteService $service)
     {
     }
