@@ -3,21 +3,22 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\Website;
-use App\Models\Keyword;
-use App\Models\Backlink;
+use App\Services\ClientDashboardService;
 
 class DashboardController extends Controller
 {
+    public function __construct(private ClientDashboardService $service)
+    {
+    }
+
     public function index()
     {
         $user = auth()->user();
 
-        $websites = Website::where('user_id',$user->id)->pluck('id');
+        $stats = $this->service->getStats($user->id);
 
-        return view('client.dashboard', [
-            'keywords' => Keyword::whereIn('website_id',$websites)->count(),
-            'backlinks' => Backlink::whereIn('website_id',$websites)->count(),
-        ]);
+        return view('client.dashboard', $stats);
     }
 }
+
+

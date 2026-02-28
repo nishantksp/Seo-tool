@@ -3,21 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\Website;
+use App\Services\WebsiteService;
 use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
 {
+    public function __construct(private WebsiteService $service)
+    {
+    }
+
     public function index()
     {
-        $websites = Website::with('user')->latest()->get();
+        $websites = $this->service->listAdminWebsites();
         return view('admin.websites.index', compact('websites'));
     }
 
     public function create()
     {
-        $clients = User::where('role','client')->get();
+        $clients = $this->service->listClients();
         return view('admin.websites.create', compact('clients'));
     }
 
@@ -28,8 +31,10 @@ class WebsiteController extends Controller
             'user_id' => 'required',
         ]);
 
-        Website::create($request->all());
+        $this->service->createWebsite($request->all());
 
         return redirect('/admin/websites')->with('success','Website Added');
     }
 }
+
+
