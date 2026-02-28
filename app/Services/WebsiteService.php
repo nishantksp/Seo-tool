@@ -19,6 +19,11 @@ class WebsiteService
         return $this->websites->getAllWithUserLatest();
     }
 
+    public function listAdminWebsitesWithKeywords(): Collection
+    {
+        return $this->websites->getAllWithUserKeywordsLatest();
+    }
+
     public function listClients(): Collection
     {
         return $this->users->getClients();
@@ -33,6 +38,32 @@ class WebsiteService
     {
         $this->websites->create($data);
     }
-}
 
+    public function getWebsiteForEdit(int $id)
+    {
+        return $this->websites->findOrFail($id);
+    }
+
+    public function updateWebsite(int $id, array $data): void
+    {
+        $website = $this->websites->findOrFail($id);
+        $this->websites->update($website, $data);
+    }
+
+    public function deleteWebsite(int $id): void
+    {
+        $website = $this->websites->findOrFail($id);
+        $this->websites->delete($website);
+    }
+
+    public function getCountries(): array
+    {
+        return ['India', 'United Kingdom', 'United States', 'Canada', 'Australia'];
+    }
+
+    public function getNiches(): array
+    {
+        return ['Digital Marketing', 'E-commerce', 'Healthcare', 'Education', 'Real Estate', 'Finance'];
+    }
+}
 
