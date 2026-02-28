@@ -12,6 +12,11 @@ class WebsiteRepository
         return Website::with('user')->latest()->get();
     }
 
+    public function getAllWithUserKeywordsLatest(): Collection
+    {
+        return Website::with(['user', 'keywords'])->latest()->get();
+    }
+
     public function getAllWithUser(): Collection
     {
         return Website::with('user')->get();
@@ -32,10 +37,25 @@ class WebsiteRepository
         return Website::create($data);
     }
 
+    public function findOrFail(int $id): Website
+    {
+        return Website::findOrFail($id);
+    }
+
+    public function update(Website $website, array $data): Website
+    {
+        $website->update($data);
+        return $website;
+    }
+
+    public function delete(Website $website): void
+    {
+        $website->delete();
+    }
+
     public function countAll(): int
     {
         return Website::count();
     }
 }
-
 
