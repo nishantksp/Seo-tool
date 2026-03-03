@@ -7,6 +7,7 @@ use App\Http\Controllers\Client\DashboardController as ClientDashboard;
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index']);
+
     //     Route::get('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'index']);
     // Route::get('/admin/websites/create', [\App\Http\Controllers\WebsiteController::class, 'create']);
     // Route::post('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'store']);
