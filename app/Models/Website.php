@@ -13,15 +13,28 @@ class Website extends Model
     'country',
 ];
 
+/**
+ * Website belongs to a client user.
+ */
 public function user()
 {
     return $this->belongsTo(\App\Models\User::class);
 }
 
+/**
+ * Assignment rows for this website.
+ */
+public function keywordAssignments()
+{
+    return $this->hasMany(\App\Models\KeywordAssignment::class);
+}
 
+/**
+ * Keywords linked to this website (via assignments).
+ */
 public function keywords()
 {
-    return $this->hasMany(\App\Models\Keyword::class);
+    // Shortcut for reporting without losing assignment metadata.
+    return $this->belongsToMany(\App\Models\Keyword::class, 'keyword_assignments');
 }
 }
-

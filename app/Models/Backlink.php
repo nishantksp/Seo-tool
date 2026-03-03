@@ -16,6 +16,9 @@ class Backlink extends Model
     'status',
 ];
 
+/**
+ * Backlink is tied to a website.
+ */
 public function website()
 {
     return $this->belongsTo(\App\Models\Website::class);

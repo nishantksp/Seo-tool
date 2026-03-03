@@ -6,11 +6,17 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class WebsiteUpdateRequest extends FormRequest
 {
+    /**
+     * Allow admin to update websites.
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Validation rules for updating a website.
+     */
     public function rules(): array
     {
         return [

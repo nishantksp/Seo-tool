@@ -33,7 +33,7 @@
     @foreach( $keywords as $keyword)
     <tr>
         <td>{{$keyword->id}}</td>
-        <td>{{$keyword->keyword}}</td>
+        <td>{{$keyword->keyword->keyword}}</td>
         <td>30</td>
         <td>30</td>
         <td>{{$keyword->created_at}}</td>

@@ -33,6 +33,25 @@
     <input type="number" name="difficulty" class="form-control">
 </div>
 
+<div class="mb-3">
+    <label>Target URL</label>
+    <input type="text" name="target_url" class="form-control">
+</div>
+
+<div class="mb-3">
+    <label>Priority (1-10)</label>
+    <input type="number" name="priority" class="form-control" min="1" max="10">
+</div>
+
+<div class="mb-3">
+    <label>Status</label>
+    <select name="status" class="form-control">
+        <option value="active">Active</option>
+        <option value="paused">Paused</option>
+        <option value="archived">Archived</option>
+    </select>
+</div>
+
 <button class="btn btn-success">Save</button>
 
 </form>

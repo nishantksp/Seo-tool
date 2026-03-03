@@ -8,14 +8,20 @@ class KeywordRanking extends Model
 {
 
 protected $fillable = [
-    'keyword_id',
+    'keyword_assignment_id',
     'rank',
     'previous_rank',
     'checked_at',
+    'search_engine',
+    'location',
+    'device_type',
 ];
 
-public function keyword()
+/**
+ * Ranking belongs to a specific keyword assignment.
+ */
+public function assignment()
 {
-    return $this->belongsTo(\App\Models\Keyword::class);
+    return $this->belongsTo(\App\Models\KeywordAssignment::class, 'keyword_assignment_id');
 }
 }

@@ -2,33 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Services\KeywordRankingService;
-use Illuminate\Http\Request;
+use App\Http\Requests\KeywordRankingStoreRequest;
 
 class KeywordRankingController extends Controller
 {
+    /**
+     * Inject ranking service.
+     */
     public function __construct(private KeywordRankingService $service)
     {
     }
 
+    /**
+     * Show the ranking update form for a keyword assignment.
+     */
     public function create($keywordId)
     {
-        $keyword = $this->service->getKeywordOrFail((int) $keywordId);
-        return view('admin.rankings.create', compact('keyword'));
+        $assignment = $this->service->getAssignmentOrFail((int) $keywordId);
+        return view('admin.rankings.create', compact('assignment'));
     }
 
-    public function store(Request $request)
+    /**
+     * Store a new ranking record.
+     */
+    public function store(KeywordRankingStoreRequest $request)
     {
-        $request->validate([
-            'keyword_id' => 'required',
-            'rank' => 'required|integer',
-        ]);
+        $data = $request->validated();
 
-        $this->service->createRanking((int) $request->keyword_id, (int) $request->rank);
+        // Keep ranking history per engine/location/device for accurate trend analysis.
+        $this->service->createRanking(
+            (int) $data['keyword_assignment_id'],
+            (int) $data['rank'],
+            $data['search_engine'] ?? null,
+            $data['location'] ?? null,
+            $data['device_type'] ?? null
+        );
 
         return redirect('/admin/keywords')->with('success','Ranking Updated');
     }
 }
-
-

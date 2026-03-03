@@ -6,20 +6,27 @@ use Illuminate\Database\Eloquent\Model;
 
 class Keyword extends Model
 {
-   public function rankings()
-{
-    return $this->hasMany(\App\Models\KeywordRanking::class);
-}
-protected $fillable = [
-    'website_id',
-    'keyword',
-    'search_volume',
-    'difficulty',
-];
+    protected $fillable = [
+        'keyword',
+        'search_volume',
+        'difficulty',
+    ];
 
-public function website()
-{
-    return $this->belongsTo(\App\Models\Website::class);
-}
+    /**
+     * Assignments that use this keyword.
+     */
+    public function assignments()
+    {
+        return $this->hasMany(\App\Models\KeywordAssignment::class);
+    }
+
+    /**
+     * Websites using this keyword (via assignments).
+     */
+    public function websites()
+    {
+        // Useful for reporting keywords used across multiple sites.
+        return $this->belongsToMany(\App\Models\Website::class, 'keyword_assignments');
+    }
 
 }
