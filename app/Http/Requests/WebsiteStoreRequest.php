@@ -6,11 +6,17 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class WebsiteStoreRequest extends FormRequest
 {
+    /**
+     * Allow admin to create websites.
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Validation rules for creating a website.
+     */
     public function rules(): array
     {
         return [

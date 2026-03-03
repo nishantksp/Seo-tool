@@ -3,55 +3,55 @@
 namespace App\Repositories;
 
 use App\Models\Keyword;
-use Illuminate\Support\Collection;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class KeywordRepository
 {
-    public function getLatestWithWebsiteUserPaginated(int $perPage = 10): LengthAwarePaginator
+    /**
+     * Find a keyword by case-insensitive match.
+     */
+    public function findByKeyword(string $keyword): ?Keyword
     {
-        return Keyword::with('website.user')->latest()->paginate($perPage);
+        return Keyword::whereRaw('LOWER(keyword) = ?', [mb_strtolower($keyword)])->first();
     }
 
-    public function getByWebsiteIdsWithLatestRanking(Collection $websiteIds): Collection
-    {
-        return Keyword::whereIn('website_id', $websiteIds)
-            ->with(['rankings' => function ($q) {
-                $q->latest()->limit(1);
-            }])
-            ->get();
-    }
-
-    public function getAllWithWebsiteUser(): Collection
-    {
-        return Keyword::with('website.user')->get();
-    }
-
+    /**
+     * Create a new keyword.
+     */
     public function create(array $data): Keyword
     {
         return Keyword::create($data);
     }
 
+    /**
+     * Find a keyword or fail.
+     */
     public function findOrFail(int $id): Keyword
     {
         return Keyword::findOrFail($id);
     }
 
+    /**
+     * Update a keyword's attributes.
+     */
     public function update(Keyword $keyword, array $data): Keyword
     {
         $keyword->update($data);
         return $keyword;
     }
 
+    /**
+     * Delete a keyword by id.
+     */
     public function deleteById(int $id): void
     {
         Keyword::destroy($id);
     }
 
+    /**
+     * Count total keywords.
+     */
     public function countAll(): int
     {
         return Keyword::count();
     }
 }
-
-

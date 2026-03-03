@@ -17,7 +17,7 @@
         @foreach($keywords as $keyword)
 
         @php
-            $latest = $keyword->rankings->first();
+            $latest = $keyword->latestRanking;
             $change = null;
 
             if($latest && $latest->previous_rank){
@@ -26,7 +26,7 @@
         @endphp
 
         <tr>
-            <td>{{ $keyword->keyword }}</td>
+            <td>{{ $keyword->keyword->keyword }}</td>
 
             <td>
                 {{ $latest->rank ?? '-' }}
@@ -38,9 +38,9 @@
 
             <td>
                 @if($change > 0)
-                    <span class="text-success">↑ {{ $change }}</span>
+                    <span class="text-success">Up {{ $change }}</span>
                 @elseif($change < 0)
-                    <span class="text-danger">↓ {{ abs($change) }}</span>
+                    <span class="text-danger">Down {{ abs($change) }}</span>
                 @else
                     -
                 @endif

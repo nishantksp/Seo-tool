@@ -11,7 +11,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     // Route::get('/admin/websites/create', [\App\Http\Controllers\WebsiteController::class, 'create']);
     // Route::post('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'store']);
     Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
-    Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
     Route::resource('/admin/backlinks', \App\Http\Controllers\BacklinkController::class);
     Route::resource('/admin/keywords', \App\Http\Controllers\KeywordController::class);
     Route::get('/admin/keywords/{id}/ranking', [\App\Http\Controllers\KeywordRankingController::class, 'create']);

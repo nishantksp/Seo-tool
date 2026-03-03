@@ -11,8 +11,10 @@
     <th>Client</th>
     <th>Website</th>
     <th>Keyword</th>
+    <th>Target URL</th>
     <th>Search Volume</th>
     <th>Difficulty</th>
+    <th>Status</th>
     <th>Action</th>
 </tr>
 
@@ -20,9 +22,11 @@
 <tr>
     <td>{{ $key->website->user->name }}</td>
     <td>{{ $key->website->domain }}</td>
-    <td>{{ $key->keyword }}</td>
-    <td>{{ $key->search_volume }}</td>
-    <td>{{ $key->difficulty }}</td>
+    <td>{{ $key->keyword->keyword }}</td>
+    <td>{{ $key->target_url ?? '-' }}</td>
+    <td>{{ $key->keyword->search_volume ?? '-' }}</td>
+    <td>{{ $key->keyword->difficulty ?? '-' }}</td>
+    <td>{{ ucfirst($key->status) }}</td>
     <td>
         <a href="/admin/keywords/{{ $key->id }}/ranking"
    class="btn btn-sm btn-info">
