@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Models\Website;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class WebsiteRepository
@@ -10,10 +12,26 @@ class WebsiteRepository
     /**
      * Admin listing with client details.
      */
-    public function getAllWithUserLatest(): Collection
+    // public function getAllWithUserLatest(): Collection
+    // {
+    //     // Admin view for all websites
+    //     return Website::with('user')->latest()->get();
+    // }
+
+    public function getAllWithUserLatest(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
-        return Website::with('user')->latest()->get();
+        return Website::with('user')
+            ->withCount('keywords')
+            ->when($filters['status'] ?? null, fn ($q, $status) => $q->where('status', $status))
+            ->when($filters['client_id'] ?? null, fn ($q, $clientId) => $q->where('user_id', $clientId))
+            ->when($filters['search'] ?? null, function ($q, $search) {
+                $q->where('domain', 'like', "%{$search}%")
+                  ->orWhereHas('user', fn ($u) => $u->where('name', 'like', "%{$search}%"));
+            })
+            ->latest()
+            ->paginate($perPage);
     }
+
 
     /**
      * Admin listing with assignments/keywords.
@@ -87,6 +105,18 @@ class WebsiteRepository
     {
         return Website::count();
     }
+
+    //getting websites with selected status
+    public function countByStatus(string $status): int 
+    {
+        return Website::where('status', $status)->count();
+    }
+
+    //getting website which is created  this month
+    public function countCreatedThisMonth(): int{
+        return Website::whereBetween('created_at',
+        [Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->count();
+    }
     //getting all websites with selected website id and domain for dropdown
     /**
      * Dropdown list for website filters.
@@ -105,6 +135,11 @@ class WebsiteRepository
         ->when($id, fn($q)=>$q->where('id', $id))
         ->latest()
         ->get();
+    }
+
+    //restoring a soft deleted website
+    public function restore(int $id):void{
+        Website::withTrashed()->findOrFail($id)->restore();
     }
 
 

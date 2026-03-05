@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\WebsiteStoreRequest;
 use App\Http\Requests\WebsiteUpdateRequest;
 use App\Services\WebsiteService;
+use Illuminate\Http\Request;
 
 class WebsiteController extends Controller
 {
@@ -19,10 +20,16 @@ class WebsiteController extends Controller
     /**
      * List admin websites with filters for country/niche.
      */
-    public function index()
-    {   $countries= $this->service->getCountries();
-        $websites = $this->service->listAdminWebsites();
-        return view('admin.websites.index', compact('websites','countries'));
+    public function index(Request $request)
+    {   $filters=[
+        'status'=>$request->query('status'),
+        'client_id'=>$request->query('client_id'),
+        'search'=>$request->query('search'),
+    ];
+        $countries= $this->service->getCountries();
+        $websites = $this->service->listAdminWebsites($filters, 15);
+        $clients = $this->service->listClients();
+        return view('admin.websites.index', compact('websites','countries','clients','filters'));
     }
 
     /**
@@ -68,12 +75,8 @@ class WebsiteController extends Controller
         $data = $request->validated();
 
         // Keep updates explicit to avoid accidental mass assignment.
-        $this->service->updateWebsite($id, [
-            'user_id' => $data['user_id'],
-            'domain' => $data['domain'],
-            'country' => $data['country'] ?? null,
-            'niche' => $data['niche'] ?? null,
-        ]);
+        $this->service->updateWebsite($id, $request->validated()
+        );
 
         return redirect('/admin/websites')->with('success','Website Updated');
     }
@@ -86,6 +89,15 @@ class WebsiteController extends Controller
         $this->service->deleteWebsite($id);
 
         return redirect('/admin/websites')->with('success','Website Deleted');
+    }
+
+    /**
+     * Restore a soft deleted website.
+     */
+    public function restore($id)
+    {
+        $this->service->restoreWebsite($id);
+        return redirect('/admin/websites')->with('success','Website Restored');
     }
 
 
