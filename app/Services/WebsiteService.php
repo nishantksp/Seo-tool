@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\UserRepository;
 use App\Repositories\WebsiteRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class WebsiteService
@@ -20,9 +21,9 @@ class WebsiteService
     /**
      * Admin list of websites.
      */
-    public function listAdminWebsites(): Collection
+    public function listAdminWebsites(array $filters=[], int $perpage=15):LengthAwarePaginator 
     {
-        return $this->websites->getAllWithUserLatest();
+        return $this->websites->getAllWithUserLatest($filters, $perpage);
     }
 
     /**
@@ -115,4 +116,19 @@ class WebsiteService
         return $this->websites->getWithKeywordsById($id);
     }
 
+    //restore a soft deleted website
+    public function restoreWebsite(int $id):void{
+        $this->websites->restore($id);
+    }
+
+    //stasts for admin dashboard
+    public function getWebsiteStats():array
+    {
+        return [
+            'total'=>$this->websites->countAll(),
+            'active'=>$this->websites->countByStatus('active'),
+            'paused'=>$this->websites->countByStatus('paused'),
+            'created_this_month'=>$this->websites->countCreatedThisMonth()
+        ];
+    }
 }

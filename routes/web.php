@@ -5,10 +5,15 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Client\DashboardController as ClientDashboard;
 use App\Http\Controllers\Admin\ClientController as AdminClientController;
+use App\Http\Controllers\Client\WebsiteController ;
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index']);
-    Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
+
+    //admin Website management
+    Route::patch('/admin/websites/{id}/restore', [WebsiteController::class, 'restore']);
+    Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class); //handles index, create, store, show, edit, update, destroy
+
     Route::resource('/admin/backlinks', \App\Http\Controllers\BacklinkController::class);
     Route::resource('/admin/keywords', \App\Http\Controllers\KeywordController::class);
     Route::get('/admin/keywords/{id}/ranking', [\App\Http\Controllers\KeywordRankingController::class, 'create']);

@@ -3,14 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Website extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
     'user_id',
     'domain',
     'niche',
     'country',
+    'status',
 ];
 
 /**

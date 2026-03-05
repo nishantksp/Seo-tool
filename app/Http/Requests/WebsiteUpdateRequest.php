@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class WebsiteUpdateRequest extends FormRequest
 {
@@ -20,10 +21,11 @@ class WebsiteUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_id' => ['required', 'integer', Rule::exists('users', 'id')->where('role', 'client')],
             'domain' => ['required', 'string', 'max:255'],
-            'user_id' => ['required', 'integer'],
             'country' => ['nullable', 'string', 'max:255'],
             'niche' => ['nullable', 'string', 'max:255'],
+            'status' => ['required', 'in:active,paused'],
         ];
     }
 }

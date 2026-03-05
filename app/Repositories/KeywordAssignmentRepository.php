@@ -13,7 +13,7 @@ class KeywordAssignmentRepository
      */
     public function getLatestWithWebsiteUserPaginated(int $perPage = 10): LengthAwarePaginator
     {
-        return KeywordAssignment::with(['website.user', 'keyword'])->latest()->paginate($perPage);
+        return KeywordAssignment::with(['website.user', 'keyword','latestRanking'])->latest()->paginate($perPage);
     }
 
     /**
@@ -27,7 +27,7 @@ class KeywordAssignmentRepository
     }
 
     /**
-     * Create a new assignment.
+     * Create a new keyword assignment.
      */
     public function create(array $data): KeywordAssignment
     {
