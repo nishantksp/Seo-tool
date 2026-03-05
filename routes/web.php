@@ -4,13 +4,10 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Client\DashboardController as ClientDashboard;
+use App\Http\Controllers\Admin\ClientController as AdminClientController;
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboard::class, 'index']);
-
-    //     Route::get('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'index']);
-    // Route::get('/admin/websites/create', [\App\Http\Controllers\WebsiteController::class, 'create']);
-    // Route::post('/admin/websites', [\App\Http\Controllers\WebsiteController::class, 'store']);
     Route::resource('admin/websites', \App\Http\Controllers\WebsiteController::class);
     Route::resource('/admin/backlinks', \App\Http\Controllers\BacklinkController::class);
     Route::resource('/admin/keywords', \App\Http\Controllers\KeywordController::class);
@@ -18,6 +15,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/rankings', [\App\Http\Controllers\KeywordRankingController::class, 'store']);
     Route::resource('/admin/onpage', \App\Http\Controllers\OnpageReportController::class);
     Route::resource('/admin/social', \App\Http\Controllers\SocialPostController::class);
+
+    // Admin Client Management
+    Route::get('admin/clients',[AdminClientController::class,'index']);
+    Route::get('admin/clients/create',[AdminClientController::class,'create']);
+    Route::post('admin/clients',[AdminClientController::class,'store']);
+    Route::get('admin/clients/{id}/edit',[AdminClientController::class,'edit']);
+    Route::put('admin/clients/{id}',[AdminClientController::class,'update']);
+    Route::delete('admin/clients/{id}',[AdminClientController::class,'destroy']);
+    // Admin Client Actions
+    Route::patch('admin/clients/{id}/deactivate',[AdminClientController::class,'deactivate']);
+    Route::patch('admin/clients/{id}/activate',[AdminClientController::class,'activate']);
+    Route::patch('admin/clients/{id}/reset-password',[AdminClientController::class,'resetPassword']);
 });
 
 Route::middleware(['auth', 'role:client'])->group(function () {

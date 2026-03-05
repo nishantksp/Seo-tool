@@ -17,7 +17,7 @@
         <th>Action</th>
     </tr>
 
-    @foreach($websites as $site)
+@foreach($websites as $site)
     <tr>
         <td>{{ $site->domain }}</td>
         <td>{{ $site->user->name }}</td>
@@ -52,9 +52,7 @@
     @endforeach
 </table>
 
-@endsection
 @foreach($websites as $site)
-
 <div class="modal fade" id="keywordsModal{{ $site->id }}" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -83,5 +81,6 @@
     </div>
   </div>
 </div>
-
 @endforeach
+
+@endsection

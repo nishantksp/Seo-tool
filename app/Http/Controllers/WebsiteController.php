@@ -47,34 +47,7 @@ class WebsiteController extends Controller
     }
 
 
-    public function edit($id)
-    {
-        $website = $this->service->getWebsiteForEdit($id);
-        $clients = $this->service->listClients();
-        $countries = $this->service->getCountries();
-        $niches = $this->service->getNiches();
-
-        return view('admin.websites.edit', compact('website', 'clients', 'countries', 'niches'));
-    }
-
-    public function update(WebsiteUpdateRequest $request, $id)
-    {
-        $this->service->updateWebsite($id, $request->validated());
-
-        return redirect('/admin/websites')->with('success','Website Updated');
-    }
-
-    public function destroy($id)
-    {
-        $this->service->deleteWebsite($id);
-
-        return redirect('/admin/websites')->with('success','Website Deleted');
-    }
-
-
-}
-
-    /**
+      /**
      * Show edit website form.
      */
     public function edit($id)
@@ -114,4 +87,8 @@ class WebsiteController extends Controller
 
         return redirect('/admin/websites')->with('success','Website Deleted');
     }
+
+
 }
+
+  
