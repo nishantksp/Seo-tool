@@ -10,6 +10,12 @@ class Keyword extends Model
         'keyword',
         'search_volume',
         'difficulty',
+        'intent',
+        'language',
+        'country',
+        'cpc',
+        'competition',
+        'is_branded',
     ];
 
     /**

@@ -21,7 +21,7 @@ class KeywordController extends Controller
      */
     public function index()
     {
-        $keywords = $this->service->listAdminKeywords();
+        $keywords = $this->service->listAdminKeywordAssignments();
         return view('admin.keywords.index', compact('keywords'));
     }
 

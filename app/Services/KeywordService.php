@@ -18,13 +18,12 @@ class KeywordService
         private KeywordRepository $keywords,
         private KeywordAssignmentRepository $assignments,
         private WebsiteRepository $websites
-    ) {
-    }
+    ) {}
 
     /**
      * Admin listing is assignment-based so each site gets its own row.
      */
-    public function listAdminKeywords(int $perPage = 10): LengthAwarePaginator
+    public function listAdminKeywordAssignments(int $perPage = 10): LengthAwarePaginator
     {
         return $this->assignments->getLatestWithWebsiteUserPaginated($perPage);
     }
@@ -51,6 +50,12 @@ class KeywordService
             $this->keywords->update($existingKeyword, [
                 'search_volume' => $data['search_volume'] ?? $existingKeyword->search_volume,
                 'difficulty' => $data['difficulty'] ?? $existingKeyword->difficulty,
+                'intent' => $data['intent'] ?? $existingKeyword->intent,
+                'language' => $data['language'] ?? $existingKeyword->language,
+                'country' => $data['country'] ?? $existingKeyword->country,
+                'cpc' => $data['cpc'] ?? $existingKeyword->cpc,
+                'competition' => $data['competition'] ?? $existingKeyword->competition,
+                'is_branded' => $data['is_branded'] ?? $existingKeyword->is_branded,
             ]);
             $keyword = $existingKeyword;
         } else {
@@ -58,6 +63,12 @@ class KeywordService
                 'keyword' => $keywordText,
                 'search_volume' => $data['search_volume'] ?? null,
                 'difficulty' => $data['difficulty'] ?? null,
+                'intent' => $data['intent'] ?? null,
+                'language' => $data['language'] ?? 'en',
+                'country' => $data['country'] ?? null,
+                'cpc' => $data['cpc'] ?? null,
+                'competition' => $data['competition'] ?? null,
+                'is_branded' => $data['is_branded'] ?? false,
             ]);
         }
 
@@ -67,6 +78,7 @@ class KeywordService
             'target_url' => $data['target_url'] ?? null,
             'priority' => $data['priority'] ?? null,
             'status' => $data['status'] ?? 'active',
+            'notes' => $data['notes'] ?? null,
         ]);
     }
 
@@ -86,11 +98,17 @@ class KeywordService
         $keywordText = trim($data['keyword']);
         $existingKeyword = $this->keywords->findByKeyword($keywordText);
 
+        // Reuse or create keyword, keep metrics updated.
         if ($existingKeyword) {
-            // Keep keyword metrics in sync when the admin provides updates.
             $this->keywords->update($existingKeyword, [
                 'search_volume' => $data['search_volume'] ?? $existingKeyword->search_volume,
                 'difficulty' => $data['difficulty'] ?? $existingKeyword->difficulty,
+                'intent' => $data['intent'] ?? $existingKeyword->intent,
+                'language' => $data['language'] ?? $existingKeyword->language,
+                'country' => $data['country'] ?? $existingKeyword->country,
+                'cpc' => $data['cpc'] ?? $existingKeyword->cpc,
+                'competition' => $data['competition'] ?? $existingKeyword->competition,
+                'is_branded' => $data['is_branded'] ?? $existingKeyword->is_branded,
             ]);
             $keyword = $existingKeyword;
         } else {
@@ -98,6 +116,12 @@ class KeywordService
                 'keyword' => $keywordText,
                 'search_volume' => $data['search_volume'] ?? null,
                 'difficulty' => $data['difficulty'] ?? null,
+                'intent' => $data['intent'] ?? null,
+                'language' => $data['language'] ?? 'en',
+                'country' => $data['country'] ?? null,
+                'cpc' => $data['cpc'] ?? null,
+                'competition' => $data['competition'] ?? null,
+                'is_branded' => $data['is_branded'] ?? false,
             ]);
         }
 
@@ -107,6 +131,7 @@ class KeywordService
             'target_url' => $data['target_url'] ?? null,
             'priority' => $data['priority'] ?? null,
             'status' => $data['status'] ?? 'active',
+            'notes' => $data['notes'] ?? null,
         ]);
     }
 
@@ -131,7 +156,8 @@ class KeywordService
     /**
      * Filter keywords for a single website id.
      */
-    public function getKeywordsByWebsiteId($id){
+    public function getKeywordsByWebsiteId($id)
+    {
         return $this->assignments->getByWebsiteIdsWithLatestRanking(collect([$id]));
     }
 }

@@ -12,6 +12,7 @@ class KeywordAssignment extends Model
         'target_url',
         'priority',
         'status',
+        'notes',
     ];
 
     /**

@@ -20,13 +20,21 @@ class KeywordAssignmentStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'website_id' => ['required', 'integer', 'exists:websites,id'],
-            'keyword' => ['required', 'string', 'max:255'],
-            'search_volume' => ['nullable', 'integer', 'min:0'],
-            'difficulty' => ['nullable', 'integer', 'min:0'],
-            'target_url' => ['nullable', 'string', 'max:255'],
-            'priority' => ['nullable', 'integer', 'min:1', 'max:10'],
-            'status' => ['nullable', 'string', 'max:20', 'in:active,paused,archived'],
+            'website_id' => ['required','exists:websites,id'],
+        'keyword' => ['required','string','max:255'],
+        'search_volume' => ['nullable','integer','min:0'],
+        'difficulty' => ['nullable','integer','min:0'],
+        'intent' => ['nullable','in:informational,transactional,navigational'],
+        'language' => ['nullable','string','max:10'],
+        'country' => ['nullable','string','max:100'],
+        'cpc' => ['nullable','numeric','min:0'],
+        'competition' => ['nullable','integer','min:0','max:100'],
+        'is_branded' => ['nullable','boolean'],
+
+        'target_url' => ['nullable','string','max:255'],
+        'priority' => ['nullable','integer','min:1','max:10'],
+        'status' => ['required','in:active,paused'],
+        'notes' => ['nullable','string','max:500'],
         ];
     }
 }
